@@ -8,6 +8,9 @@ class User < ApplicationRecord
          :jwt_authenticatable,
          jwt_revocation_strategy: JwtDenylist,
          authentication_keys: [:login]
+  
+  has_many :events, dependent: :destroy
+  has_many :bookings, dependent: :destroy
 
   enum :role, { admin: 0, organizer: 1, user: 2 }, default: :user
 
@@ -16,7 +19,7 @@ class User < ApplicationRecord
   validates :name, length: { in: 2..64 }, allow_blank: true
   validates :email, presence: true, uniqueness: true
   validates :phone_number, length: { in: 10..15 }, allow_blank: true
-  validates :address, presence: true, length: { maximum: 500, message: 'must not exceed 20 charaters' }
+  validates :address, presence: true, length: { maximum: 100, message: 'must not exceed 100 charaters' }
 
   scope :organizers, -> { where(role: 1) }
 end

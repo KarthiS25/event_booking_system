@@ -21,6 +21,14 @@ Rails.application.routes.draw do
       namespace :admin, path: "admins" do
         resources :users
       end
+
+      namespace :event_organizer, path: "event-organizers" do
+        resources :events
+      end
+
+      namespace :customer, path: "users" do
+        get :event_list , path: "event-list", to: "bookings#event_list"
+      end
     end
   end
 end

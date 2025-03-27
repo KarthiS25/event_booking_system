@@ -28,6 +28,8 @@ gem 'active_model_serializers', '~> 0.10.2'
 # Redis
 gem "redis"
 
+gem 'kaminari'
+
 # Sidekiq
 gem "sidekiq"
 gem "sidekiq-scheduler"

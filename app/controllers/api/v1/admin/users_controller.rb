@@ -6,6 +6,8 @@ class Api::V1::Admin::UsersController < ApplicationController
 
   def index
     @users = User.organizers
+                 .page(params[:page])
+                 .per(params[:per_page])
 
     response_success("User list", 200, array_serializer_for(resource: @users, serializer: UserSerializer))
   end
