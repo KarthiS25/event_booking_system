@@ -32,6 +32,10 @@ class Api::V1::EventOrganizer::EventsController < ApplicationController
   def update
     return error_message unless @event.update(event_params)
 
+    remove_existing_job(@event.job_id) if @event.job_id.present?
+    job_id = NotificationJob.perform_at(Time.zone.now, @event.id)
+    @event.update(job_id: job_id)
+
     response_success("Event updated successfully", 200, serializer_for(resource: @event, serializer: EventSerializer))
   end
 
@@ -56,10 +60,9 @@ class Api::V1::EventOrganizer::EventsController < ApplicationController
     response_failure("", 422, @event.errors.full_messages[0])
   end
 
-  def authenticate_organize_user!
-    unless current_user&.organizer?
-      render json: { message: "You are not authorized to access" }, status: :unauthorized
-      return
-    end
+  def remove_existing_job job_id
+    scheduled = Sidekiq::ScheduledSet.new
+    scheduled.select { |job| job.delete if job_id == job.jid.to_s }
+    @event.update(job_id: nil)
   end
 end

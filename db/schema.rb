@@ -18,8 +18,14 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_27_184418) do
     t.integer "quantity", default: 1
     t.bigint "user_id"
     t.bigint "ticket_id"
+    t.bigint "event_id"
+    t.datetime "booked_date_time"
+    t.string "reference_number"
+    t.decimal "amount", default: "0.0"
+    t.string "job_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_bookings_on_event_id"
     t.index ["ticket_id"], name: "index_bookings_on_ticket_id"
     t.index ["user_id"], name: "index_bookings_on_user_id"
   end
@@ -32,6 +38,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_27_184418) do
     t.datetime "end_time"
     t.string "venue"
     t.bigint "user_id"
+    t.string "job_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_events_on_user_id"
@@ -48,6 +55,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_27_184418) do
   create_table "tickets", force: :cascade do |t|
     t.integer "ticket_type"
     t.decimal "price"
+    t.integer "available", default: 0
     t.integer "quantity", default: 0
     t.bigint "event_id"
     t.datetime "created_at", null: false

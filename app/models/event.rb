@@ -1,6 +1,7 @@
 class Event < ApplicationRecord
   belongs_to :user
   has_many :tickets, dependent: :destroy
+  has_many :bookings, dependent: :destroy
   after_commit :create_tickets
 
   validates :name, presence: true, length: { in: 2..64 }

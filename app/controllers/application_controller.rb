@@ -41,6 +41,36 @@ class ApplicationController < ActionController::API
     serializer_params[:serializer] = serializer if serializer_type == 'hash'
   end
 
+  def authenticate_customer_user!
+    return unauthorized_message("Your session expired. Please sign in again to continue.") unless current_user
+
+    if current_user.organizer? || current_user.user?
+      current_user
+    else
+      render json: { error: "You are not authorized to access." }, status: :unauthorized unless @current_user
+    end
+  end
+
+  def authenticate_organize_user!
+    return unauthorized_message("Your session expired. Please sign in again to continue.") unless current_user
+    
+    if current_user.organizer?
+      current_user
+    else
+      render json: { error: "You are not authorized to access. Event orgaizer only access this page" }, status: :unauthorized unless @current_user
+    end
+  end
+
+  def authenticate_admin_user!
+    return unauthorized_message("Your session expired. Please sign in again to continue.") unless current_user
+    
+    if current_user.admin?
+      current_user
+    else
+      render json: { error: "You are not authorized to access. Admin only access this page" }, status: :unauthorized unless @current_user
+    end
+  end
+
   private
 
   def unauthorized_message message

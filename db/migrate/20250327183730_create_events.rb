@@ -8,6 +8,7 @@ class CreateEvents < ActiveRecord::Migration[7.1]
       t.datetime    :end_time
       t.string      :venue
       t.references  :user
+      t.string      :job_id
 
       t.timestamps
     end

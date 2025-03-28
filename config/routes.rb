@@ -28,6 +28,10 @@ Rails.application.routes.draw do
 
       namespace :customer, path: "users" do
         get :event_list , path: "event-list", to: "bookings#event_list"
+        post "events/:event_id/book-event" , to: "bookings#create"
+        resources :bookings do
+          delete "cancel-booking", on: :member
+        end
       end
     end
   end

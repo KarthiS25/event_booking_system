@@ -50,11 +50,4 @@ class Api::V1::Admin::UsersController < ApplicationController
   def error_message
     response_failure("", 422, @user.errors.full_messages[0])
   end
-
-  def authenticate_admin_user!
-    unless current_user&.admin?
-      render json: { message: "You are not authorized access" }, status: :unauthorized
-      return
-    end
-  end
 end
